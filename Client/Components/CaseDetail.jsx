@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Route, Link } from 'react-router-dom';
 
-import { Menu, Icon, Form, Input, Button, Select } from 'antd';
+import { Menu, Icon, Form, Input, Button, Select ,Row,Col } from 'antd';
 const SubMenu = Menu.SubMenu;
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -51,7 +51,28 @@ class CaseDetail extends Component {
 
         return <div className="case_detail">
             <CaseMenu />
-            <JsonForm/>
+            <section classname="middle">
+                <Row>
+                    <Col span={12}>
+                        <JsonForm/>
+                    </Col>
+                    <Col span={12}>
+                        
+                    </Col>
+                </Row>
+            </section>
+            <section>
+                <Form>
+                    <FormItem>
+                        <Input type="text"/>
+                    </FormItem>
+                </Form>
+            </section>
+            
+
+
+
+            
         </div>
     }
 }
