@@ -42,24 +42,25 @@ class JsonFormControlled extends Component {
             //     }
             // ],
             regular: [
-                { name: "keyName", type: "str",length:null },
+                { name: "", type: "str", length: null },
                 // { name: "apples", type: "list", length: null, children: [{ name: null, type: "string", length: 10 }] }
             ],
             caseTypes: [
-                {"type":"object","name":"object","lenable":false},{"type":"basis","name":"decimal","lenable":false},{"type":"array","name":"list","lenable":true},{"type":"basis","name":"str","lenable":true},{"type":"object","name":"dict","lenable":false},{"type":"basis","name":"float","lenable":false},{"type":"basis","name":"int","lenable":false},{"type":"basis","name":"ssn","lenable":false},{"type":"basis","name":"phone_number","lenable":false},{"type":"basis","name":"name","lenable":false},{"type":"basis","name":"text","lenable":true},{"type":"basis","name":"job","lenable":false},{"type":"basis","name":"uri","lenable":false},{"type":"basis","name":"email","lenable":false},{"type":"basis","name":"date_time","lenable":false},{"type":"basis","name":"date","lenable":false},{"type":"basis","name":"credit_card_number","lenable":false},{"type":"basis","name":"company","lenable":false},{"type":"basis","name":"color_name","lenable":false},{"type":"basis","name":"address","lenable":false}
+                { "type": "object", "name": "object", "lenable": false }, { "type": "basis", "name": "decimal", "lenable": false }, { "type": "array", "name": "list", "lenable": true }, { "type": "basis", "name": "str", "lenable": true }, { "type": "object", "name": "dict", "lenable": false }, { "type": "basis", "name": "float", "lenable": false }, { "type": "basis", "name": "int", "lenable": false }, { "type": "basis", "name": "ssn", "lenable": false }, { "type": "basis", "name": "phone_number", "lenable": false }, { "type": "basis", "name": "name", "lenable": false }, { "type": "basis", "name": "text", "lenable": true }, { "type": "basis", "name": "job", "lenable": false }, { "type": "basis", "name": "uri", "lenable": false }, { "type": "basis", "name": "email", "lenable": false }, { "type": "basis", "name": "date_time", "lenable": false }, { "type": "basis", "name": "date", "lenable": false }, { "type": "basis", "name": "credit_card_number", "lenable": false }, { "type": "basis", "name": "company", "lenable": false }, { "type": "basis", "name": "color_name", "lenable": false }, { "type": "basis", "name": "address", "lenable": false }
             ]
         };
         this.getKeyValueByTypeName = this.getKeyValueByTypeName.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
+        this.handleOnInput = this.handleOnInput.bind(this);
     }
 
-    componentDidMount() { 
+    componentDidMount() {
         const { dispatch } = this.props;
         dispatch(getCaseTypes());
     }
 
 
-    getKeyValueByTypeName(typeName,key){ 
+    getKeyValueByTypeName(typeName, key) {
         const { caseTypes } = this.state;
         return (caseTypes.filter((ele, i) => {
             if (typeName === ele.name) {
@@ -75,25 +76,42 @@ class JsonFormControlled extends Component {
             const isLenable = this.getKeyValueByTypeName(item.type, "lenable");
             console.log(basicType, isLenable);
             return <li key={i}>
-                <Input addonBefore="Key" value={item.name}/>
-                <Select value={item.type} onChange={(value) => { this.handleSelect(value,item,i)}}>
+                <Input addonBefore="Key" value={item.name} onChange={(value) => this.handleOnInput(value, "name", i)} />
+                <Select value={item.type} onChange={(value) => { this.handleSelect(value, item, i) }}>
                     {
-                        caseTypes.map((caseType,i) => { 
+                        caseTypes.map((caseType, i) => {
                             return <Option value={caseType.name} key={i}>{caseType.name}</Option>
                         })
                     }
-                    </Select>
-                {isLenable ? <Input addonBefore="Length" /> : null}
-                {this.getSecondary(item,basicType)}
-                </li>
+                </Select>
+                {isLenable ? <Input addonBefore="Length" onChange={(value) => this.handleOnInput(value, "length", i)} /> : null}
+                {basicType === 'object' ? <div className="icon"><i className="fa fa-plus-square-o"></i></div> : null}
+                {this.getSecondary(item, basicType)}
+            </li>
         });
     }
 
-    getSecondary(item, basicType) { 
-    
+    getSecondary(item, basicType) {
+
         const { caseTypes } = this.state;
         if (basicType === 'object') {
-            return <div className="icon"><i className="fa fa-plus-square-o"></i></div>
+            return <ul>
+                {
+                    item.children.map((ele, i) => {
+                        return <li>
+                            <Input addonBefore="Key" />
+                            <Select value={item.type} onChange={(value) => { this.handleSelect(value, item, i) }}>
+                                {
+                                    caseTypes.map((caseType, i) => {
+                                        return <Option value={caseType.name} key={i}>{caseType.name}</Option>
+                                    })
+                                }
+                            </Select>
+                            {isLenable ? <Input addonBefore="Length" onChange={(value) => this.handleOnInput(value, "length", i)} /> : null}
+                        </li>
+                    })
+                }
+            </ul>
         } else if (basicType === 'array') {
             return <ul><li>
                 <Select defaultValue="string" onChange={() => { console.log(111) }}>
@@ -105,30 +123,31 @@ class JsonFormControlled extends Component {
                 </Select>
                 {this.getKeyValueByTypeName(item.type, "lenable") ? <Input addonBefore="Length" /> : null}
             </li></ul>
-        } else if (basicType === 'basis') { 
-            return <div className="icon"><i className="fa fa-plus-square-o"></i></div>
         }
     }
 
 
-    handleSelect(value, item, i) { 
+    handleSelect(value, item, i) {
         console.log("onChange");
         let { regular } = this.state;
         regular[i].type = value;
-        this.setState({regular});
+        this.setState({ regular });
     }
 
-    handleSecondarySelect() { 
+    handleSecondarySelect() {
 
     }
 
-    handleObjectAddNewItem() { 
-
+    handleOnInput(value, key, index1, index2) {
+        let { regular } = this.state;
+        if (index2 === undefined) {
+            regular[index1][key] = value;
+        } else {
+            regular[index1].children[index2][key] = value;
+        }
     }
-    handleBasicAddNewItem() { 
 
-    }
- 
+
 
     render() {
         const { history } = this.props;
@@ -136,6 +155,7 @@ class JsonFormControlled extends Component {
         console.log(regular);
         const _key = "key";
         return <section className="form">
+            <Button type="primary">Create Key</Button>
             <ul className="jsonForm">
                 {this.getFormFromRegular(regular)}
             </ul>

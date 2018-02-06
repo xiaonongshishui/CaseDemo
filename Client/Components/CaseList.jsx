@@ -90,7 +90,7 @@ class CaseList extends Component {
                 loadMore={loadMore}
                 dataSource={caseList}
                 renderItem={item => (
-                    <List.Item actions={[<a>more</a>]}>
+                    <List.Item actions={[<a href={`/caseDetail/${item.id}`}>more</a>]}>
                         <List.Item.Meta
                             title={item.name}
                             description=""
@@ -112,7 +112,7 @@ class CaseList extends Component {
 }
 
 function mapStateToProps(state) {
-    return { caseList: state.case.caseList }
+    return { caseList: state.Case.caseList }
 }
 
 export default withRouter(connect(mapStateToProps)(CaseList));
