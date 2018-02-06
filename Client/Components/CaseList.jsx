@@ -112,7 +112,7 @@ class CaseList extends Component {
 }
 
 function mapStateToProps(state) {
-    return { chatRoomsNameList: state.chatRooms.chatRoomsNameList }
+    return { caseList: state.case.caseList }
 }
 
 export default withRouter(connect(mapStateToProps)(CaseList));

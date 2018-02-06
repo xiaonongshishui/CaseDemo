@@ -63,7 +63,8 @@ var config = {
             'actions': CLIENT_PATH + '/Actions',
             'reducers': CLIENT_PATH + '/Reducers',
             'assets':CLIENT_PATH + '/Assets',
-            'images': CLIENT_PATH + '/Assets/images'
+            'images': CLIENT_PATH + '/Assets/images',
+            'service':CLIENT_PATH + '/Service'
         },
         extensions: [".jsx", ".js", ".json"]
     },

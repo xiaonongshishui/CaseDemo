@@ -7,9 +7,6 @@
     "start": "npm run client-dev",
     "client-dev": "cross-env NODE_ENV=development node webpack.dev.js",
     "release": "cross-env NODE_ENV=production node webpack.release.js",
-    "server-dev": "cross-env NODE_ENV=development nodemon Server/index.js --exec babel-node",
-    "build": "cross-env NODE_ENV=production babel Server -d dist",
-    "server": "cross-env NODE_ENV=production node dist/index.js",
     "test": "mocha --compilers js:babel-register"
   },
   "keywords": [
@@ -25,8 +22,6 @@
   "homepage": "",
   "dependencies": {
     "babel-runtime": "^6.26.0",
-    "koa": "^2.4.1",
-    "mongoose": "^4.13.4",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
@@ -66,12 +61,12 @@
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
     "mocha": "^4.0.1",
-    "nodemon": "^1.12.1",
     "postcss-loader": "^2.0.8",
     "postcss-plugin": "^1.0.0",
     "prop-types": "^15.6.0",
     "react-hot-loader": "^3.1.2",
     "redux-devtools": "^3.4.0",
+    "reqwest": "^2.0.5",
     "style-loader": "^0.19.0",
     "underscore": "^1.8.3",
     "url-loader": "^0.6.2",

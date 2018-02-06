@@ -24,7 +24,17 @@ class JsonForm extends Component {
                     a: 1,
                     b: 2
                 }
-            }
+            },
+            regular: [
+                { name: "a", type: "String",serviceType:null, length: 6 },
+                { name: "b", type: "Array",serviceType:"name", length: 6 },
+                {
+                    name: "c",
+                    type: "Object",
+                    children: [
+                        { name: "c-1", type: "String", serviceType:"address",length: 6 },
+                ]}
+            ]
         };
         this.handleChangeSelectType = this.handleChangeSelectType.bind(this);
         this.getFromFromJson = this.getFromFromJson.bind(this);
@@ -111,7 +121,7 @@ class JsonForm extends Component {
 }
 
 function mapStateToProps(state) {
-    return {}
+    return {  }
 }
 
 export default withRouter(connect(mapStateToProps)(JsonForm));
