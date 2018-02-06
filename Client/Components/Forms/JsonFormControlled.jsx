@@ -107,7 +107,7 @@ class JsonFormControlled extends Component {
                                     })
                                 }
                             </Select>
-                            {isLenable ? <Input addonBefore="Length" onChange={(value) => this.handleOnInput(value, "length", i)} /> : null}
+                            {isLenable ? <Input addonBefore="Length" onChange={(e) => this.handleOnInput(e.target.value, "length", i)} /> : null}
                         </li>
                     })
                 }
