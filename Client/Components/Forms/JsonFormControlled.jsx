@@ -76,7 +76,7 @@ class JsonFormControlled extends Component {
             const isLenable = this.getKeyValueByTypeName(item.type, "lenable");
             console.log(basicType, isLenable);
             return <li key={i}>
-                <Input addonBefore="Key" value={item.name} onChange={(value) => this.handleOnInput(value, "name", i)} />
+                <Input addonBefore="Key" value={item.name} onChange={(e) => this.handleOnInput(e.target.value, "name", i)} />
                 <Select value={item.type} onChange={(value) => { this.handleSelect(value, item, i) }}>
                     {
                         caseTypes.map((caseType, i) => {
@@ -84,7 +84,7 @@ class JsonFormControlled extends Component {
                         })
                     }
                 </Select>
-                {isLenable ? <Input addonBefore="Length" onChange={(value) => this.handleOnInput(value, "length", i)} /> : null}
+                {isLenable ? <Input addonBefore="Length" onChange={(e) => this.handleOnInput(e.target.value, "length", i)} /> : null}
                 {basicType === 'object' ? <div className="icon"><i className="fa fa-plus-square-o"></i></div> : null}
                 {this.getSecondary(item, basicType)}
             </li>
@@ -145,6 +145,7 @@ class JsonFormControlled extends Component {
         } else {
             regular[index1].children[index2][key] = value;
         }
+        this.setState({regular});
     }
 
 
