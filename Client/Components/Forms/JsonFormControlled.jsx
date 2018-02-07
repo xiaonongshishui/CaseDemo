@@ -19,28 +19,6 @@ class JsonFormControlled extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rawJson: {
-        "name": "Jack",
-        "age": 18,
-        "sex": "male",
-        "apples": ["1", "2", "3"],
-        "object": {
-          a: 1,
-          b: 2
-        }
-      },
-
-      // _regular: [
-      //     { name: "a", type: "String", serviceType: null, length: 6 },
-      //     { name: "b", type: "Array", serviceType: "name", length: 6 },
-      //     {
-      //         name: "c",
-      //         type: "Object",
-      //         children: [
-      //             { name: "c-1", type: "String", serviceType: "address", length: 6 },
-      //         ]
-      //     }
-      // ],
       regular: [
         { name: "", type: "str", length: null },
         // { name: "apples", type: "list", length: null, children: [{ name: null, type: "string", length: 10 }] }
@@ -203,7 +181,6 @@ class JsonFormControlled extends Component {
     }
 
     this.setState({ regular });
-
   }
 
   handleOnInput(value, key, index1, index2) {

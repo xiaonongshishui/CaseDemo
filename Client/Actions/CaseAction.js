@@ -1,6 +1,6 @@
 import { actionCreator } from './actionCreator';
 import BaseRequest from 'service/BaseRequest';
-import { GetTypesRequest , GetCaseListRequest } from 'service/Api'
+import { GetTypesRequest , GetCaseListRequest , InsertManualRequest , GetSampleDataRequest } from 'service/Api'
 
 
 export const SET_CASE_TYPES = "SET_CASE_TYPES";
@@ -27,6 +27,27 @@ export const getCaseList = () => (dispatch,getState) => {
         }
     }, (err) => { 
 
+    });
+}
+
+
+export const insertManual = (caseId,manualData) => (dispatch,getState) => { 
+    BaseRequest(InsertManualRequest(caseId), manualData).then({ result, data }) => { 
+    if (result === 'success') { 
+        
+    }
+}, (err) => { });
+}
+
+export const getSampleData = (caseId,template) => (dispatch,getState) =>{
+    return BaseRequest(GetSampleDataRequest(caseId), template).then(({ result, data }) => {
+        if (result === 'success') {
+            return Promise.resolve(data);
+        } else { 
+            return Promise.reject("getSampleData err");
+        }
+     }, (err) => { 
+        return Promise.reject(err);
     });
 }
 

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Route, Link } from 'react-router-dom';
 
-import JSONEditor from 'JSONEditor';
+import JSONEditor from 'jsoneditor';
 import "editor/dist/jsoneditor.min.css";
 
-class JSONComponent extends Component {
+class JSONEditorComponent extends Component {
 
   static defaultProps = {
   };
@@ -29,6 +29,7 @@ class JSONComponent extends Component {
     this.editor = new JSONEditor(this.editorRef, {
       mode: this.mode,
       onChange: this.handleChange,
+      "search": false
     });
     window.editor = this.editor;
     if (this.props.json) {
@@ -48,38 +49,9 @@ class JSONComponent extends Component {
     this.editor.destroy();
   }
 
-  getProperties(){
 
-  }
 
-  getType(src){
-    let type = null;
-    switch (Object.prototype.toString.call(src)) {
-      case "[object String]":
-        type = "string";
-        break;
-      case "[object Number]":
-        type = "number";
-        break;
-      case "[object Null]":
-        type = "null";
-        break;
-      case "[object Boolean]":
-        type = "boolean";
-        break;
-      case "[object Object]":
-        type = "object";
-        break;
-      case "[object Array]":
-        type = 'array';
-        break;
-      default:
-        break;
-    }
-    return type;
-  }
-
-  getSchema(json){
+  getSchema=(json)=>{
 
     if (!(json || this.getType(json) === 'object')) return {};
     this.jsonList = [];
@@ -176,20 +148,14 @@ class JSONComponent extends Component {
     return schema;
   }
 
-  schema(){
+  schema=()=>{
     let json = this.editor.get();
     let schema = this.getSchema(json);
     console.log(json, schema);
     this.editor.setSchema(schema);
   }
-  toSelectType(){
-    this.schema();
-    this.editor.setMode("form");
-    this.editor.expandAll();
-    this.toggleList();
-  }
 
-  toEditorJSON(){
+  toEditorJSON=()=>{
 
     this.editor.setMode("code");
     this.editor.setSchema({});
@@ -197,12 +163,14 @@ class JSONComponent extends Component {
     this.toggleList()
   }
 
-  handleChange(){
+  handleChange=()=>{
+    let that= this;
+    console.log('change');
+    
     try {
-      console.log('change');
-
+      
       this.setState({
-        json: this.editor.get(),
+        json: that.editor.get(),
       });
     } catch (e) {
       // HACK! This should propagate the error somehow
@@ -210,17 +178,12 @@ class JSONComponent extends Component {
     }
   }
 
-  formatJSON(){
+  formatJSON=()=>{
     this.editor.format();
   }
 
-  changeMode(){
-    let mode = this.mode;
-    this.mode = mode === "code" ? "form" : "code";
-    this.editor.setMode(this.mode);
-  }
 
-  renderInput(){
+  renderInput=()=>{
     console.log('render')
     let jsonList = this.jsonList;
     let List = [];
@@ -238,42 +201,20 @@ class JSONComponent extends Component {
     return List;
   }
 
-  toggleList(src){
-    console.log('render list')
-    this.setState({
-      list: !this.state.list
-    });
-  }
+
   
   render() {
     const { height, width } = this.props;
     const { list } = this.state;
     console.log('render', this.state);
-    window.z = this;
     return (
       <div>
-        <div className="inputList">
-          {list ? this.renderInput() : "wait List..."}
-        </div>
-
         <div
           id='editor'
           ref={(ref) => { this.editorRef = ref; }}
-          style={{ width: 400, height: 400, float: 'left' }}
+          style={{ width: 400, height: 400,margin:"0 auto"}}
         />
-        <br />
-        <br />
-        <br />
-        <button onClick={this.toSelectType}>toSelectType</button>
-        <button onClick={this.toEditorJSON}>editJSON</button>
-        <br />
-        <br />
-        <button onClick={this.formatJSON}>formatJSON</button>
-        <button onClick={this.schema}>schema</button>
-        <button onClick={this.changeMode}>changeMode</button>
-        <button onClick={this.toggleList}>toggleList</button>        
       </div>
-
     );
   }
 }
@@ -283,4 +224,4 @@ function mapStateToProps(state) {
   return {  }
 }
 
-export default withRouter(connect(mapStateToProps)(JSONComponent));
+export default withRouter(connect(mapStateToProps)(JSONEditorComponent));

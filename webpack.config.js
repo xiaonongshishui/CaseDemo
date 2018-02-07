@@ -31,7 +31,14 @@ var config = {
         test: /\.(less|css)$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: ['css-loader', {
+          use: [{
+            loader: 'css-loader',
+            options: {
+              alias: {
+                "img": "editor/dist/img"
+              }
+            }
+          }, {
             loader: 'postcss-loader',
             options: {
               ident: 'postcss',
@@ -40,19 +47,19 @@ var config = {
           }, 'less-loader']
         })
       },
-      // {
-      //     test: /\.(?:jpg|gif|png|svg)$/,
-      //     use: [
-      //         'url-loader?limit=8000&name=img/[hash].[ext]',
-      //         'image-webpack-loader'
-      //     ]
-      // },
       {
         test: /\.(?:jpg|gif|png|svg)$/,
         use: [
           'image-webpack-loader'
         ]
       },
+      //   {
+      //     test: /\.(?:jpg|gif|png|svg)$/,
+      //     use: [
+      //         'url-loader?limit=8000&name=img/[hash].[ext]',
+      //         'image-webpack-loader'
+      //     ]
+      // },
       {
         test: /\.json$/,
         use: ['json-loader']
@@ -70,8 +77,8 @@ var config = {
       'reducers': CLIENT_PATH + '/Reducers',
       'assets': CLIENT_PATH + '/Assets',
       'images': CLIENT_PATH + '/Assets/images',
-      'service': CLIENT_PATH + '/Service',
       'editor': ROOT_PATH + '/node_modules/jsoneditor',
+      'service': CLIENT_PATH + '/Service',
     },
     extensions: [".jsx", ".js", ".json"]
   },

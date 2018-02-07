@@ -2,36 +2,31 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Route, Link } from 'react-router-dom';
 
-import { Menu, Icon, Form, Input, Button, Select ,Row,Col } from 'antd';
-const SubMenu = Menu.SubMenu;
+import { Menu, Icon, Form, Input, Button, Select, Row, Col, InputNumber, Tabs } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
+const TabPane = Tabs.TabPane;
 
-import JsonForm from './JsonForm'
+import JsonForm from './JsonForm';
+import JSONEditorComponent from 'components/Json/JSONEditorComponent';
+import JsonFormDisplay from 'components/Forms/JsonFormDisplay';
+import DummyDataView from 'components/DummyDataView';
 
-const CaseMenu = ({ handleClick }) => {
-    return <Menu
-        onClick={handleClick}
-        style={{ width: 256 }}
-        defaultSelectedKeys={['1']}
-        defaultOpenKeys={['sub1']}
-        mode="horizontal"
-    >
-        <Menu.Item key="1">
-            <Icon type="mail" />
-            Detail
-        </Menu.Item>
-        <Menu.Item key="2">
-            <Icon type="mail" />
-            Data
-        </Menu.Item>
-    </Menu>
+
+const CaseTab = ({ handleOnChangeTab , activeKey }) => {
+    return <Tabs defaultActiveKey="0" activeKey={activeKey} onChange={handleOnChangeTab} type="card">
+        <TabPane tab="Case Detail" key="0"></TabPane>
+        <TabPane tab="View Dummy Data" key="1"></TabPane>
+    </Tabs>
 }
+
+
 
 class CaseDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            activeTabKey: "0",
             json: {
                 "name": "Jack",
                 "age": 18,
@@ -45,40 +40,48 @@ class CaseDetail extends Component {
         }
     }
 
+    handleOnChangeTab = (key) => { 
+        this.setState({activeTabKey:key});
+    }
 
     render() {
         const { history } = this.props;
+        const { activeTabKey } = this.state;
 
-        return <div className="case_detail">
-            <CaseMenu />
-            <section classname="middle">
+        return <div className="case_detail">   
+            <CaseTab handleOnChangeTab={this.handleOnChangeTab} activeKey={activeTabKey}/>
+            <section className="middle" style={{display:activeTabKey === "0"?"block":"none"}}>
                 <Row>
-                    <Col span={12}>
-                        <JsonForm/>
+                    <Col span={10}>
+                        <JsonFormDisplay />
                     </Col>
-                    <Col span={12}>
-                        
+                    <Col span={8}>
+                        <JSONEditorComponent />
+                        <div style={{ textAlign: "center", marginTop: "20px" }}>
+                            <Button type="primary">Submit Manual Data</Button>
+                        </div>
+                    </Col>
+                    <Col span={6} style={{ textAlign: "center" }}>
+                        <Form>
+                            <FormItem>
+                                <h1>Please Enter the Quantity</h1>
+                                <InputNumber min={1} style={{ width: "120px" }} />
+
+                            </FormItem>
+                            <Button type="danger" size="large">Generate Data</Button>
+                        </Form>
                     </Col>
                 </Row>
             </section>
-            <section>
-                <Form>
-                    <FormItem>
-                        <Input type="text"/>
-                    </FormItem>
-                </Form>
+            <section style={{display:activeTabKey === "1"?"block":"none"}}>
+                <DummyDataView />
             </section>
-            
-
-
-
-            
         </div>
     }
 }
 
 function mapStateToProps(state) {
-    return {  }
+    return {}
 }
 
 export default withRouter(connect(mapStateToProps)(CaseDetail));
