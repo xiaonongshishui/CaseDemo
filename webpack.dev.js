@@ -7,8 +7,8 @@ var host = '127.0.0.1';
 
 
 var options = {
-    hot: true,
-    host:host
+  hot: true,
+  host: host
 };
 
 var localPublicPath = 'http://' + host + ':' + port + '/';
@@ -21,19 +21,19 @@ config.output.publicPath = '/';
 config.plugins.push(new webpack.HotModuleReplacementPlugin());
 
 WebpackDevServer.addDevServerEntrypoints(config, options);
-var server = new WebpackDevServer(webpack(config),{
-    hot:true,
-    inline:true,
-    compress: true,
-    stats:{
-        colors: true
-    },
-    open:true,
-    historyApiFallback: true
+var server = new WebpackDevServer(webpack(config), {
+  hot: true,
+  inline: true,
+  compress: true,
+  stats: {
+    colors: true
+  },
+  open: true,
+  historyApiFallback: true
 });
-server.listen(port,host,function(err){
-    if (err) {
-        console.log(err);
-    }
-    console.log(host + ":"+port);
+server.listen(port, host, function (err) {
+  if (err) {
+    console.log(err);
+  }
+  console.log(host + ":" + port);
 });

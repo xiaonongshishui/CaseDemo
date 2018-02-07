@@ -5,11 +5,11 @@ import { withRouter, Route, Link } from 'react-router-dom';
 import { Select, Row, Col, Button } from 'antd'
 import jsoneditor from 'jsoneditor';
 import JsonFormControlled from 'components/Forms/JsonFormControlled';
-import JSONComponent from 'components/JSON/JSONComponent';
+import JSONEditorComponent from 'components/JSONData/JSONEditorComponent';
 
-import DataTree from './Json/DataTree';
+import DataTree from './JSONData/DataTree';
 
-// import JSON from './Json/JSON'
+
 
 class CaseCompile extends Component {
     constructor(props) {
@@ -39,7 +39,7 @@ class CaseCompile extends Component {
             
                 <Row>
                     <Col span={15}>
-                        {mode === "JSON" ? <JSONComponent /> : <JsonFormControlled />}
+                        {mode === "JSON" ? <JSONEditorComponent /> : <JsonFormControlled />}
                     </Col>
                     <Col span={9}>
                         <div className="templateData">
@@ -59,7 +59,7 @@ class CaseCompile extends Component {
 }
 
 function mapStateToProps(state) {
-    return {}
+  return {}
 }
 
 export default withRouter(connect(mapStateToProps)(CaseCompile));

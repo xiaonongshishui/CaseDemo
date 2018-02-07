@@ -7,8 +7,6 @@ import "editor/dist/jsoneditor.min.css";
 
 class JSONEditorComponent extends Component {
 
-  static defaultProps = {
-  };
 
   constructor(props) {
     super(props);
@@ -51,7 +49,7 @@ class JSONEditorComponent extends Component {
 
 
 
-  getSchema=(json)=>{
+  getSchema = (json) => {
 
     if (!(json || this.getType(json) === 'object')) return {};
     this.jsonList = [];
@@ -148,14 +146,14 @@ class JSONEditorComponent extends Component {
     return schema;
   }
 
-  schema=()=>{
+  schema = () => {
     let json = this.editor.get();
     let schema = this.getSchema(json);
     console.log(json, schema);
     this.editor.setSchema(schema);
   }
 
-  toEditorJSON=()=>{
+  toEditorJSON = () => {
 
     this.editor.setMode("code");
     this.editor.setSchema({});
@@ -163,27 +161,33 @@ class JSONEditorComponent extends Component {
     this.toggleList()
   }
 
-  handleChange=()=>{
-    let that= this;
+  handleChange = () => {
+    let that = this;
     console.log('change');
-    
+
     try {
-      
+
       this.setState({
         json: that.editor.get(),
       });
+      // this.error=false;
+      this.props.editorChange(that.editor.get())
+
     } catch (e) {
       // HACK! This should propagate the error somehow
-      console.error(e);
+      // console.error(e);
+      // this.error=e;
+      this.props.editorChange(e);
+
     }
   }
 
-  formatJSON=()=>{
+  formatJSON = () => {
     this.editor.format();
   }
 
 
-  renderInput=()=>{
+  renderInput = () => {
     console.log('render')
     let jsonList = this.jsonList;
     let List = [];
@@ -201,8 +205,10 @@ class JSONEditorComponent extends Component {
     return List;
   }
 
+  getJSON = () => {
+    return this.editor.get();
+  }
 
-  
   render() {
     const { height, width } = this.props;
     const { list } = this.state;
@@ -212,7 +218,7 @@ class JSONEditorComponent extends Component {
         <div
           id='editor'
           ref={(ref) => { this.editorRef = ref; }}
-          style={{ width: 400, height: 400,margin:"0 auto"}}
+          style={{ width: 400, height: 400, margin: "0 auto" }}
         />
       </div>
     );
@@ -221,7 +227,8 @@ class JSONEditorComponent extends Component {
 
 
 function mapStateToProps(state) {
-  return {  }
+  return {}
 }
 
-export default withRouter(connect(mapStateToProps)(JSONEditorComponent));
+export default JSONEditorComponent;
+// export default withRouter(connect(mapStateToProps)(JSONEditorComponent));

@@ -10,7 +10,7 @@ function Request(method,url,param) {
 
 export const GetTypesRequest = new Request("get", '/api/regulartype');
 export const GetCaseListRequest = new Request("get", "/api/case");
-
+export const CreateCaseRequest = new Request("post","/api/case");
 
 export const InsertManualRequest = (caseid) => new Request("put", "/api/case", caseid);
 

@@ -11,6 +11,7 @@ var CACHE_PATH = ROOT_PATH + '/Cache';
 var __DEV__ = process.env.NODE_ENV === 'development';
 
 var config = {
+  devtool: 'source-map',
   entry: {
     lib: ['react', 'react-dom', 'react-router', 'react-router-dom', 'redux', 'react-redux'],
     app: [CLIENT_PATH + '/index.js']

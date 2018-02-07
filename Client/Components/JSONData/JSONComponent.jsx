@@ -29,6 +29,7 @@ class JSONComponent extends Component {
     this.editor = new JSONEditor(this.editorRef, {
       mode: this.mode,
       onChange: this.handleChange,
+      onError: this.handleError,
     });
     window.editor = this.editor;
     if (this.props.json) {
@@ -48,11 +49,15 @@ class JSONComponent extends Component {
     this.editor.destroy();
   }
 
-  getProperties=()=>{
+  getProperties = () => {
 
   }
 
-  getType=(src)=>{
+  handleError = (e) => {
+    console.log('err', e);
+  }
+
+  getType = (src) => {
     let type = null;
     switch (Object.prototype.toString.call(src)) {
       case "[object String]":
@@ -79,7 +84,7 @@ class JSONComponent extends Component {
     return type;
   }
 
-  getSchema=(json)=>{
+  getSchema = (json) => {
 
     if (!(json || this.getType(json) === 'object')) return {};
     this.jsonList = [];
@@ -176,13 +181,13 @@ class JSONComponent extends Component {
     return schema;
   }
 
-  schema=()=>{
+  schema = () => {
     let json = this.editor.get();
     let schema = this.getSchema(json);
     console.log(json, schema);
     this.editor.setSchema(schema);
   }
-  toSelectType=()=>{
+  toSelectType = () => {
     console.log("toSelectType")
     this.schema();
     this.editor.setMode("form");
@@ -190,7 +195,7 @@ class JSONComponent extends Component {
     this.toggleList();
   }
 
-  toEditorJSON=()=>{
+  toEditorJSON = () => {
 
     this.editor.setMode("code");
     this.editor.setSchema({});
@@ -198,32 +203,34 @@ class JSONComponent extends Component {
     this.toggleList()
   }
 
-  handleChange=()=>{
-    let that= this;
+  handleChange = () => {
+    let that = this;
     console.log('change');
-    
+
     try {
-      
+
       this.setState({
         json: that.editor.get(),
       });
+      this.error = false;
     } catch (e) {
       // HACK! This should propagate the error somehow
-      console.error(e);
+      // console.error(e);
+      this.error = e;
     }
   }
 
-  formatJSON=()=>{
+  formatJSON = () => {
     this.editor.format();
   }
 
-  changeMode=()=>{
+  changeMode = () => {
     let mode = this.mode;
     this.mode = mode === "code" ? "form" : "code";
     this.editor.setMode(this.mode);
   }
 
-  renderInput=()=>{
+  renderInput = () => {
     console.log('render')
     let jsonList = this.jsonList;
     let List = [];
@@ -241,13 +248,13 @@ class JSONComponent extends Component {
     return List;
   }
 
-  toggleList=(src)=>{
+  toggleList = (src) => {
     console.log('render list')
     this.setState({
       list: !this.state.list
     });
   }
-  
+
   render() {
     const { height, width } = this.props;
     const { list } = this.state;
@@ -274,7 +281,7 @@ class JSONComponent extends Component {
         <button onClick={this.formatJSON}>formatJSON</button>
         <button onClick={this.schema}>schema</button>
         <button onClick={this.changeMode}>changeMode</button>
-        <button onClick={this.toggleList}>toggleList</button>        
+        <button onClick={this.toggleList}>toggleList</button>
       </div>
 
     );
@@ -283,7 +290,7 @@ class JSONComponent extends Component {
 
 
 function mapStateToProps(state) {
-  return {  }
+  return {}
 }
 
 export default withRouter(connect(mapStateToProps)(JSONComponent));

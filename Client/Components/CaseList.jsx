@@ -2,14 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Route, Link } from 'react-router-dom';
 
-import { List, Avatar, Button, Spin, Icon ,Modal ,Input , message } from 'antd';
+import { getCaseList, createCase } from 'actions/CaseAction';
+import { List, Avatar, Button, Spin, Icon, Modal, Input, message } from 'antd';
 
 const iconStyle = {
     color: "#fff",
     cursor: "pointer"
 };
 
-
+const hintStyle = {
+    textAlign: "center",
+    marginTop: "50px",
+    lineHeight: "20px"
+}
 
 class CaseList extends Component {
     constructor(props) {
@@ -37,21 +42,34 @@ class CaseList extends Component {
                     name: "我是第二个case"
                 }
             ],
-            loading: false,
-            loadingMore: false,
-            showLoadingMore: true,
-            isDialogOpen:false
+            isDialogOpen: false,
+            isLoading: false,
+            confirmLoading:false
         };
         this.handleCreateCase = this.handleCreateCase.bind(this);
         this.handleOpenDialog = this.handleOpenDialog.bind(this);
         this.handleCloseDialog = this.handleCloseDialog.bind(this);
     }
+    componentDidMount() {
+        const { dispatch } = this.props;
+        dispatch(getCaseList());
+    }
 
     handleCreateCase() {
         console.log(this.caseName);
-        if (this.handleValidateCaseName(this.caseName.input.value)) {
-            this.props.history.push('/caseCompile');
-            this.handleCloseDialog();
+        const { dispatch } = this.props;
+        let caseName = this.caseName.input.value;
+        if (this.handleValidateCaseName(caseName)) {
+            this.setState({ confirmLoading: true });
+            dispatch(createCase(caseName)).then(() => {
+                this.setState({ confirmLoading: false });
+                message.success("Create Success");
+                dispatch(getCaseList());
+                this.handleCloseDialog();
+            }, (err) => {
+                this.setState({ confirmLoading: false });
+                message.error("Create failed")
+            });
         } else {
             message.error("Please enter the right name");
         }
@@ -69,44 +87,41 @@ class CaseList extends Component {
     }
 
     render() {
-        const { history } = this.props;
-        const { caseList, loading, loadingMore, showLoadingMore ,isDialogOpen } = this.state;
-        const loadMore = showLoadingMore ? (
-            <div style={{ textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px' }}>
-                {loadingMore && <Spin />}
-                {!loadingMore && <Button onClick={this.onLoadMore}>loading more</Button>}
-            </div>
-        ) : null;
+        const { history, caseList } = this.props;
+        const { isDialogOpen , isLoading ,confirmLoading } = this.state;
+        console.log(caseList);
 
         return <div className="case_list" >
-            <div style={{ textAlign: "right" }}>
-                <Button type="primary" onClick={this.handleOpenDialog}>Create New Case</Button>
-            </div>
-            <h1>Case List</h1>
-            {caseList.length > 0 ? <List
-                className="demo-loadmore-list"
-                loading={loading}
-                itemLayout="horizontal"
-                loadMore={loadMore}
-                dataSource={caseList}
-                renderItem={item => (
-                    <List.Item actions={[<a href={`/caseDetail/${item.id}`}>more</a>]}>
-                        <List.Item.Meta
-                            title={item.name}
-                            description=""
-                        />
-                        <div>content</div>
-                    </List.Item>
-                )}
-            /> : <div style={{ textAlign: "center" }}>No case<br />Please create one</div>}
-            <Modal
-                title="Create Case"
-                visible={isDialogOpen}
-                onOk={this.handleCreateCase}
-                onCancel={this.handleCloseDialog}
-            >
-                <Input placeholder="Please enter the case name" ref={(ref)=>{this.caseName = ref}}/>
-            </Modal>
+            
+                <div style={{ textAlign: "right" }}>
+                    <Button type="primary" onClick={this.handleOpenDialog}>Create New Case</Button>
+                </div>
+                <h1>Case List</h1>
+                {caseList.length > 0 ? <List
+                    className="demo-loadmore-list"
+                    loading={loading}
+                    itemLayout="horizontal"
+                    dataSource={caseList}
+                    renderItem={item => (
+                        <List.Item actions={[<a href={`/caseDetail/${item.id}`}>more</a>]}>
+                            <List.Item.Meta
+                                title={item.name}
+                                description=""
+                            />
+                            <div>content</div>
+                        </List.Item>
+                    )}
+                /> : <div style={hintStyle}>No case<br />Please create one</div>}
+                
+                <Modal
+                    title="Create Case"
+                    visible={isDialogOpen}
+                    confirmLoading={confirmLoading}
+                    onOk={this.handleCreateCase}
+                    onCancel={this.handleCloseDialog}
+                >
+                    <Input placeholder="Please enter the case name" ref={(ref) => { this.caseName = ref }} />  
+                </Modal>
         </div>
     }
 }
