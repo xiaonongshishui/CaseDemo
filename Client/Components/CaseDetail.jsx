@@ -49,8 +49,8 @@ class CaseDetail extends Component {
     } catch (e) {
       alert('err');
     }
-
   }
+  
   editorChange = (json) => {
     console.log(json, json instanceof Error);
   }

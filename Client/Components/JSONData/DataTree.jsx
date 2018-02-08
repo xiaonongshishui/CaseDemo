@@ -29,8 +29,8 @@ class DataTree extends Component {
 
 
     render() {
-        const { isShow } = this.props;
-        return <div style={{display:isShow?"block":"none"}}><JSONTree data={this.state.data} /></div>
+        const { isShow ,data } = this.props;
+        return <div style={{display:isShow?"block":"none"}}><JSONTree data={data} /></div>
     }
 }
 

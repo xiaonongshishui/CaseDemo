@@ -4,13 +4,13 @@ function Request(method,url,param) {
     this.method = method;
     this.url = baseUrl + url;
     if (param) { 
-        this.url = this.url + '/'+param
+        this.url = this.url + '/' + param + '/';
     }
 }
 
-export const GetTypesRequest = new Request("get", '/api/regulartype');
-export const GetCaseListRequest = new Request("get", "/api/case");
-export const CreateCaseRequest = new Request("post","/api/case");
+export const GetTypesRequest = new Request("get", '/api/regulartype/');
+export const GetCaseListRequest = new Request("get", "/api/case/");
+export const CreateCaseRequest = new Request("post","/api/case/");
 
 export const InsertManualRequest = (caseid) => new Request("put", "/api/case", caseid);
 
