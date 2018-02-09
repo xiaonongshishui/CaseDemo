@@ -7,10 +7,11 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 
-import CaseGenerateView from 'components/CaseGenerateView';
+import JSONEditorComponent from 'components/JSONData/JSONEditorComponent';
+import JsonFormDisplay from 'components/Forms/JsonFormDisplay';
 import DummyDataView from 'components/DummyDataView';
 
-// import { insertManual, getCaseDetail ,generateDummyData } from 'actions/CaseAction';
+import { insertManual, getCaseDetail ,generateDummyData } from 'actions/CaseAction';
 
 const CaseTab = ({ handleOnChangeTab, activeKey }) => {
   return <Tabs defaultActiveKey="0" activeKey={activeKey} onChange={handleOnChangeTab} type="card">
@@ -45,7 +46,12 @@ class CaseDetail extends Component {
   componentDidMount() {
     const { dispatch, match } = this.props;
     const caseId = match.params.caseId;
-    
+    dispatch(getCaseDetail(caseId)).then(({ regular }) => {
+      console.log("regular", regular, typeof regular);
+      this.setState({ regular });
+    }, (err) => {
+      message.error("Get Detail Failed");
+    });
   }
 
   handleOnChangeTab = (key) => {
@@ -95,10 +101,36 @@ class CaseDetail extends Component {
 
     return <div className="case_detail">
       <Spin spinning={isLoading}>
-        <CaseTab handleOnChangeTab={this.handleOnChangeTab} activeKey={activeTabKey} />
-
+      <CaseTab handleOnChangeTab={this.handleOnChangeTab} activeKey={activeTabKey} />
+      {/* <section className="middle" style={{ display: activeTabKey === "0" ? "block" : "none" }}> */}
       <section className="middle">
-        {activeTabKey === "0" ? <CaseGenerateView />:<DummyDataView />}
+        {activeTabKey === "0" ? <Row>
+          <Col span={10}>
+            <JsonFormDisplay regular={regular} />
+          </Col>
+          <Col span={8}>
+            <JSONEditorComponent
+              editorChange={this.editorChange}
+              ref={(ref) => {
+                this.editor = ref;
+              }}
+            />
+            <div style={{ textAlign: "center", marginTop: "20px" }}>
+              <Button type="primary" onClick={this.submitJson}>Submit Manual Data</Button>
+            </div>
+          </Col>
+          <Col span={6} style={{ textAlign: "center" }}>
+            <Form>
+              <FormItem>
+                <h1>Please Enter the Quantity</h1>
+                  <InputNumber min={1} style={{ width: "120px" }} ref={(ref) => { this.quantity = ref }} onChange={this.onChangeQuantity}/>
+
+              </FormItem>
+                <Button type="danger" size="large" onClick={this.generateData}>Generate Data</Button>
+            </Form>
+          </Col>
+        </Row> : <DummyDataView />}
+
       </section>
 </Spin>
     </div>

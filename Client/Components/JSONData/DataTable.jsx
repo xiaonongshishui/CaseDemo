@@ -69,7 +69,7 @@ class DataTable extends Component {
     return type;
   }
   getJsonList = (json) => {
-    json = this.state.data[0]
+    json = this.props.data[0]
 
     if (!json) return {};
     let that = this;
@@ -140,7 +140,7 @@ class DataTable extends Component {
   render() {
     const { isShow } = this.props;
     let tableData = [];
-    const { data } = this.state;
+    const { data } = this.props;
     let columns = null;
     data.map((item, i) => {
       // tableData = [...tableData, ...this.getJsonList(item)];

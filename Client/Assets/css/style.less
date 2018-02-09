@@ -5,6 +5,7 @@
 ::-webkit-scrollbar-thumb { background:#c2c2c2;  border: thin solid #c3c3c3;  border-radius:10px;}
 ::-webkit-scrollbar-thumb:hover { background:rgb(125,125,125); border: thin solid rgba(125,125,125,0.8);}
 
+@menuHeight:46px;
 
 .ant-menu-item-selected{
   background: none!important;
@@ -51,9 +52,13 @@
 
 
 .case_compile{
-  position: relative;
-  height: 100%;
+  position: absolute;
+  top:@menuHeight;
+  bottom:0;
+  left:0;
+  right:0;
   padding:20px;
+  overflow-y: auto;
   .main{
     position: absolute;
     top:0;
@@ -79,14 +84,23 @@
     text-align: center;
   }
 }
-
-.case_detail{
-  position: relative;
-  height: 100%;
-  padding:20px;
-  .middle{
-    padding-top: 20px;
+.case_generate{
+  .header{
+    // padding-top: 20px;
+    padding-bottom:20px;
+    border-bottom:1px dashed #c5c5c5;
+    margin-bottom: 20px;
   }
+
+}
+.case_detail{
+  position: absolute;
+  top:@menuHeight;
+  bottom:0;
+  left:0;
+  right:0;
+  padding:20px;
+  overflow-y: auto;
   .footer{
     text-align: center;
   }
@@ -97,9 +111,34 @@
     text-align: right;
     padding:10px 20px;
   }
+  .ant-input-number{
+    vertical-align: middle;
+  }
 }
 
 .dummy_data{
+  .header{
+    border-bottom:1px dashed #c5c5c5;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    .item{
+      &>span,&>button,&>div{
+        vertical-align: middle;
+      }
+      &>span{
+        margin-right: 5px;
+      }
+      button{
+        margin-left: 5px;
+      }
+    }
+    .item.left{
+      text-align: left;
+    }
+    .item.right{
+      text-align: right;
+    }
+  }
   .export{
     text-align: right;
     &>span{

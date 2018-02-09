@@ -2,14 +2,17 @@ import reqwest from 'reqwest';
 
 export default function (request, data) {
   return new Promise((resolve, reject) => {
-    const options = Object.assign({}, request, { data }, { crossOrigin: true, type: "json", contentType: "application/json" });
+    let options = Object.assign({}, request, { crossOrigin: true, type: "json", contentType: "application/json" });
+    if (data !== undefined) {
+      options = Object.assign({},options, { data: JSON.stringify(data) });
+    }
+    
     console.log("options",options);
-    reqwest(Object.assign({}, request, { data }, { crossOrigin: true })).then((response) => {
-      let _response = JSON.parse(response);
-      if (_response.result === 'success') {
-        resolve(_response);
+    reqwest(options).then((response) => {
+      if (response.result === 'success') {
+        resolve(response);
       } else { 
-        reject(_response.info + " err");
+        reject(response.info + " err");
       }
     }, (err) => {reject("server err" + err)});
   });

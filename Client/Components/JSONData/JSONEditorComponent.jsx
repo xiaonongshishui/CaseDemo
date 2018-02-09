@@ -37,10 +37,16 @@ class JSONEditorComponent extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.editor.set(nextProps.json);
-    this.setState({
-      json: nextProps.json,
-    });
+    // this.editor.set(nextProps.json);
+    // this.setState({
+    //   json: nextProps.json,
+    // });
+    if (nextProps.json) {
+      this.editor.set(nextProps.json);
+      this.setState({
+        json: nextProps.json,
+      });
+    }
   }
 
   componentWillUnmount() {

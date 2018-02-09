@@ -10,19 +10,6 @@ class DataTree extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data:[{
-                array: [1, 2, 3],
-                bool: true,
-                object: {
-                  foo: 'bar'
-                }
-              },{
-                array: [1, 2, 3],
-                bool: true,
-                object: {
-                  foo: 'bar'
-                }
-              }]
         };
     }
 

@@ -45,7 +45,7 @@ class CaseList extends Component {
                 message.success("Create Success");
                 dispatch(getCaseList());
                 this.handleCloseDialog();
-                history.push(`/caseCompile/${caseId}`);
+                history.push(`/caseDetail/${caseId}`);
             }, (err) => {
                 this.setState({ confirmLoading: false });
                 message.error("Create failed")
@@ -66,11 +66,15 @@ class CaseList extends Component {
         this.setState({ isDialogOpen: false });
     }
 
+    getTime = (dateStr) => { 
+        let date = new Date(dateStr);
+        return date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
+    }
+
     render() {
         const { history, caseList } = this.props;
         const { isDialogOpen, isLoading, confirmLoading } = this.state;
-        console.log("caseList", caseList);
-        console.log(this.props);
+        //console.log("caseList", caseList);
 
         return <div className="case_list" >
 
@@ -86,7 +90,7 @@ class CaseList extends Component {
                     <List.Item actions={[<a href={`/caseDetail/${item.id}`}>more</a>]}>
                         <List.Item.Meta
                             title={item.name}
-                            description={`createdTime:${item.createdtime}`}
+                            description={`createdTime: ${this.getTime(item.createdtime)}`}
                         />
                     </List.Item>
                 )}

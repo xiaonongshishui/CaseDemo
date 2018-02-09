@@ -5,7 +5,6 @@ import store from 'reducers/index';
 import 'assets/css/main.less'
 
 import CaseList from 'components/CaseList'
-import CaseCompile from 'components/CaseCompile'
 import CaseDetail from 'components/CaseDetail'
 
 import { Menu, Icon } from 'antd';
@@ -40,7 +39,6 @@ export default class App extends Component {
                 <div style={{ width: "100%", height: "100%" }} className="main">
                     <CaseMenu handleClickMenu={this.handleClickMenu} />
                     <Route path="/" exact component={CaseList} />
-                    <Route path="/caseCompile/:caseId" exact component={CaseCompile} />
                     <Route path="/caseDetail/:caseId" exact component={CaseDetail} />
                 </div>
             </Router>

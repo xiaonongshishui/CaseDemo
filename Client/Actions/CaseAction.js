@@ -7,7 +7,7 @@ import { GetTypesRequest ,
     GetSampleDataRequest ,
     SubmitCaseRequest,
     GetCaseDetailRequest,
-    GenerateDummyData,
+    GenerateDummyDataRequest,
     GetDummyDataRequest
 } from 'service/Api'
 
@@ -16,16 +16,12 @@ export const SET_CASE_TYPES = "SET_CASE_TYPES";
 export const setCaseTypes = actionCreator(SET_CASE_TYPES,"caseTypes");
 
 export const getCaseTypes = ()=>(dispatch,getState)=>{
-    return BaseRequest(GetTypesRequest).then(({ result, data }) => {
-        if (result === 'success') { 
+    return new Promise((resolve,reject)=>{
+        BaseRequest(GetTypesRequest).then(({data})=>{
             dispatch(setCaseTypes(data));
-            return Promise.resolve();
-        }else{
-            return Promise.reject("getCaseTypes err");
-        }
-    },(err)=>{
-        return Promise.reject(err);
-    })
+            return resolve(data)
+        },(err)=>{return reject(err)});
+    });
 }
 
 export const SET_CASE_LIST = "SET_CASE_LIST";
@@ -65,6 +61,7 @@ export const insertManual = (caseId,manualData) => (dispatch,getState) => {
 export const getSampleData = (caseId,template) => (dispatch,getState) =>{
     return new Promise((resolve,reject)=>{
         BaseRequest(GetSampleDataRequest(caseId), template).then(({data})=>{
+            console.log("getSampleData",data);
             return resolve(data);
         },(err)=>{reject(err);})
     });
@@ -89,19 +86,21 @@ export const getCaseDetail = (caseId) =>(dispatch,getState) => {
 
 export const generateDummyData = (caseId,batchnum) => (dispatch,getState) => {
     return new Promise((resolve,reject)=>{
-        BaseRequest(GenerateDummyData(caseId),{batchnum}).then(()=>{
+        BaseRequest(GenerateDummyDataRequest(caseId),{batchnum:batchnum}).then(()=>{
             return resolve();
         },(err)=>{return reject(err);});
     });
 }
 
-export const getDummyDataRequest = (caseId) => (dispatch,getState) => {
+export const getDummyData = (caseId) => (dispatch,getState) => {
     return new Promise((resolve,reject)=>{
         BaseRequest(GetDummyDataRequest(caseId)).then(({data})=>{
             return resolve(data);
         },(err)=>{reject(err);});
     });
 }
+
+// export const downloadFile = (caseId) => (dispatch)
 
 
 
